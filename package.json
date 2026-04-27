@@ -1,5 +1,5 @@
 {
-  "name": "@alduin-eo/eolib",
+  "name": "eolib",
   "version": "2.0.1",
   "description": "Core library for writing applications related to Endless Online.",
   "exports": {
