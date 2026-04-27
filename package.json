@@ -1,5 +1,5 @@
 {
-  "name": "eolib",
+  "name": "@alduin-eo/eolib",
   "version": "2.0.1",
   "description": "Core library for writing applications related to Endless Online.",
   "exports": {
@@ -40,14 +40,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cirras/eolib-ts.git"
+    "url": "git+https://github.com/alduin-eo/eolib-ts.git"
   },
   "author": "Jonah Jeleniewski",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cirras/eolib-ts/issues"
+    "url": "https://github.com/alduin-eo/eolib-ts/issues"
   },
-  "homepage": "https://github.com/cirras/eolib-ts",
+  "homepage": "https://github.com/alduin-eo/eolib-ts",
   "devDependencies": {
     "@rgrove/parse-xml": "^4.2.0",
     "@shipgirl/typedoc-plugin-versions": "^0.3.2",
