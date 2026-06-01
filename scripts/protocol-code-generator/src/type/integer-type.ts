@@ -1,4 +1,4 @@
-import type { BasicType } from "./basic-type";
+import type { BasicType } from './basic-type';
 
 export class IntegerType implements BasicType {
   private readonly _name: string;
@@ -9,8 +9,8 @@ export class IntegerType implements BasicType {
     this._size = size;
   }
 
-  public get typeKind(): "basic" {
-    return "basic";
+  public get typeKind(): 'basic' {
+    return 'basic';
   }
 
   public get name(): string {

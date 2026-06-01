@@ -1,7 +1,7 @@
-import { THREE_MAX } from "@eolib/data/eo-numeric-limits.js";
-import { serverVerificationHash } from "@eolib/encrypt/server-verification-utils.js";
+import { THREE_MAX } from '@eolib/data/eo-numeric-limits.js';
+import { serverVerificationHash } from '@eolib/encrypt/server-verification-utils.js';
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from 'vitest';
 
 const TEST_DATA = [
   { challenge: 0, hash: 114000 },
@@ -21,7 +21,7 @@ const TEST_DATA = [
   { challenge: THREE_MAX - 1, hash: 105960 },
 ];
 
-describe("serverVerificationHash()", () => {
+describe('serverVerificationHash()', () => {
   TEST_DATA.forEach((data) => {
     it(`should hash ${data.challenge} to ${data.hash}`, () => {
       expect(serverVerificationHash(data.challenge)).toBe(data.hash);

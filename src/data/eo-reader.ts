@@ -1,6 +1,6 @@
-import { decodeNumber } from "./number-encoding-utils.js";
-import { decodeString } from "./string-encoding-utils.js";
-import { decode1252 } from "./windows-1252.js";
+import { decodeNumber } from './number-encoding-utils.js';
+import { decodeString } from './string-encoding-utils.js';
+import { decode1252 } from './windows-1252.js';
 
 /**
  * A class for reading EO data from a sequence of bytes.
@@ -49,11 +49,11 @@ export class EoReader {
     length: number = Math.max(0, this.data.length - index),
   ): EoReader {
     if (index < 0) {
-      throw new Error("negative index: " + index);
+      throw new Error('negative index: ' + index);
     }
 
     if (length < 0) {
-      throw new Error("negative length: " + length);
+      throw new Error('negative length: ' + length);
     }
 
     const begin = Math.max(0, Math.min(this.data.length, index));
@@ -139,7 +139,7 @@ export class EoReader {
    */
   public getFixedString(length: number, padded = false): string {
     if (length < 0) {
-      throw new Error("Negative length");
+      throw new Error('Negative length');
     }
     let bytes = this.readBytes(length);
     if (padded) {
@@ -169,7 +169,7 @@ export class EoReader {
    */
   public getFixedEncodedString(length: number, padded = false): string {
     if (length < 0) {
-      throw new Error("Negative length");
+      throw new Error('Negative length');
     }
     let bytes = this.readBytes(length);
     decodeString(bytes);
@@ -227,7 +227,7 @@ export class EoReader {
    */
   public nextChunk(): void {
     if (!this.chunkedReadingMode) {
-      throw new Error("Not in chunked reading mode.");
+      throw new Error('Not in chunked reading mode.');
     }
 
     this._position = this.nextBreak;

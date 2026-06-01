@@ -1,8 +1,8 @@
-import fs from "fs";
-import { type Changelog, parser, Release } from "keep-a-changelog";
+import fs from 'fs';
+import { type Changelog, parser, Release } from 'keep-a-changelog';
 
-const version: string = require("../package.json").version;
-const changelog: Changelog = parser(fs.readFileSync("CHANGELOG.md", "utf-8"));
+const version: string = require('../package.json').version;
+const changelog: Changelog = parser(fs.readFileSync('CHANGELOG.md', 'utf-8'));
 
 const existing = changelog.findRelease(version);
 if (existing) {
@@ -20,4 +20,4 @@ unreleased.setDate(new Date());
 
 changelog.addRelease(new Release());
 
-fs.writeFileSync("CHANGELOG.md", changelog.toString(), { encoding: "utf-8" });
+fs.writeFileSync('CHANGELOG.md', changelog.toString(), { encoding: 'utf-8' });

@@ -3,11 +3,11 @@ import {
   INT_MAX,
   SHORT_MAX,
   THREE_MAX,
-} from "./eo-numeric-limits.js";
-import { encodeNumber } from "./number-encoding-utils.js";
-import { encodeString } from "./string-encoding-utils.js";
+} from './eo-numeric-limits.js';
+import { encodeNumber } from './number-encoding-utils.js';
+import { encodeString } from './string-encoding-utils.js';
 
-import { encode1252 } from "./windows-1252.js";
+import { encode1252 } from './windows-1252.js';
 
 /** A class for writing EO data to a sequence of bytes. */
 export class EoWriter {

@@ -1,23 +1,23 @@
-import { type BasicType, isBasicType } from "../type/basic-type";
-import { BlobType } from "../type/blob-type";
-import { BoolType } from "../type/bool-type";
-import { isCustomType } from "../type/custom-type";
-import { hasUnderlyingType } from "../type/has-underlying-type";
-import { IntegerType } from "../type/integer-type";
-import { Length } from "../type/length";
-import { StringType } from "../type/string-type";
-import { StructType } from "../type/struct-type";
-import type { Type } from "../type/type";
-import type { TypeFactory } from "../type/type-factory";
-import { generateTsDoc } from "../util/doc-utils";
-import { snakeCaseToCamelCase } from "../util/name-utils";
-import { isInteger, tryParseInt } from "../util/number-utils";
-import { CodeBlock } from "./code-block";
+import { type BasicType, isBasicType } from '../type/basic-type';
+import { BlobType } from '../type/blob-type';
+import { BoolType } from '../type/bool-type';
+import { isCustomType } from '../type/custom-type';
+import { hasUnderlyingType } from '../type/has-underlying-type';
+import { IntegerType } from '../type/integer-type';
+import { Length } from '../type/length';
+import { StringType } from '../type/string-type';
+import { StructType } from '../type/struct-type';
+import type { Type } from '../type/type';
+import type { TypeFactory } from '../type/type-factory';
+import { generateTsDoc } from '../util/doc-utils';
+import { snakeCaseToCamelCase } from '../util/name-utils';
+import { isInteger, tryParseInt } from '../util/number-utils';
+import { CodeBlock } from './code-block';
 import {
   FieldData,
   type ObjectGenerationContext,
   type ObjectGenerationData,
-} from "./object-code-generator";
+} from './object-code-generator';
 
 class FieldCodeGenerator {
   private readonly typeFactory: TypeFactory;
@@ -85,7 +85,7 @@ class FieldCodeGenerator {
   private validateSpecialFields(): void {
     if (this.arrayField && this.lengthField) {
       throw new Error(
-        "A field cannot be both a length field and an array field.",
+        'A field cannot be both a length field and an array field.',
       );
     }
   }
@@ -96,17 +96,17 @@ class FieldCodeGenerator {
     }
 
     if (this.name === null) {
-      throw new Error("Optional fields must specify a name.");
+      throw new Error('Optional fields must specify a name.');
     }
   }
 
   private validateArrayField(): void {
     if (this.arrayField) {
       if (this.name === null) {
-        throw new Error("Array fields must specify a name.");
+        throw new Error('Array fields must specify a name.');
       }
       if (this.hardcodedValue) {
-        throw new Error("Array fields may not specify hardcoded values.");
+        throw new Error('Array fields may not specify hardcoded values.');
       }
       if (!this.delimited && !this.getType().bounded) {
         throw new Error(
@@ -114,17 +114,17 @@ class FieldCodeGenerator {
         );
       }
     } else if (this.delimited) {
-      throw new Error("Only arrays can be delimited.");
+      throw new Error('Only arrays can be delimited.');
     }
   }
 
   private validateLengthField(): void {
     if (this.lengthField) {
       if (this.name === null) {
-        throw new Error("Length fields must specify a name.");
+        throw new Error('Length fields must specify a name.');
       }
       if (this.hardcodedValue !== null) {
-        throw new Error("Length fields may not specify hardcoded values.");
+        throw new Error('Length fields may not specify hardcoded values.');
       }
       const type = this.getType();
       if (!(type instanceof IntegerType)) {
@@ -133,7 +133,7 @@ class FieldCodeGenerator {
         );
       }
     } else if (this.offset !== 0) {
-      throw new Error("Only length fields can have an offset.");
+      throw new Error('Only length fields can have an offset.');
     }
   }
 
@@ -143,11 +143,11 @@ class FieldCodeGenerator {
     }
 
     if (this.hardcodedValue === null) {
-      throw new Error("Unnamed fields must specify a hardcoded field value.");
+      throw new Error('Unnamed fields must specify a hardcoded field value.');
     }
 
     if (this.optional) {
-      throw new Error("Unnamed fields may not be optional.");
+      throw new Error('Unnamed fields may not be optional.');
     }
   }
 
@@ -221,12 +221,12 @@ class FieldCodeGenerator {
       tsTypeName = `${tsTypeName}[]`;
     }
     if (this.optional) {
-      tsTypeName += " | null";
+      tsTypeName += ' | null';
     }
 
     let initializer: string;
     if (this.hardcodedValue === null) {
-      initializer = "null";
+      initializer = 'null';
     } else if (type instanceof StringType) {
       initializer = `"${this.hardcodedValue}"`;
     } else {
@@ -260,7 +260,7 @@ class FieldCodeGenerator {
         .indent()
         .addStatement(`return this._${tsName}`)
         .unindent()
-        .addLine("}"),
+        .addLine('}'),
     );
 
     if (this.hardcodedValue === null) {
@@ -283,7 +283,7 @@ class FieldCodeGenerator {
           .endControlFlow();
       }
 
-      setter.unindent().addLine("}");
+      setter.unindent().addLine('}');
 
       this.data.addMethod(setter);
     }
@@ -298,11 +298,11 @@ class FieldCodeGenerator {
       if (fieldData) {
         const maxValue =
           getMaxValueOf(fieldData.type as IntegerType) + fieldData.offset;
-        sizeDescription = maxValue + " or less";
+        sizeDescription = maxValue + ' or less';
       } else {
-        sizeDescription = "`" + this.lengthString + "`";
+        sizeDescription = '`' + this.lengthString + '`';
         if (this.padded) {
-          sizeDescription += " or less";
+          sizeDescription += ' or less';
         }
       }
       notes.push(`Length must be ${sizeDescription}.`);
@@ -310,7 +310,7 @@ class FieldCodeGenerator {
 
     const type = this.getType();
     if (type instanceof IntegerType) {
-      const valueDescription = this.arrayField ? "Element value" : "Value";
+      const valueDescription = this.arrayField ? 'Element value' : 'Value';
       notes.push(`${valueDescription} range is 0-${getMaxValueOf(type)}`);
     }
 
@@ -333,8 +333,8 @@ class FieldCodeGenerator {
 
       if (this.delimited && !this.trailingDelimiter) {
         this.data.serialize
-          .beginControlFlow("if (i > 0)")
-          .addStatement("writer.addByte(0xFF)")
+          .beginControlFlow('if (i > 0)')
+          .addStatement('writer.addByte(0xFF)')
           .endControlFlow();
       }
     }
@@ -343,7 +343,7 @@ class FieldCodeGenerator {
 
     if (this.arrayField) {
       if (this.delimited && this.trailingDelimiter) {
-        this.data.serialize.addStatement("writer.addByte(0xFF)");
+        this.data.serialize.addStatement('writer.addByte(0xFF)');
       }
       this.data.serialize.endControlFlow();
     }
@@ -368,7 +368,7 @@ class FieldCodeGenerator {
         `let reachedNullOptional = data._${tsName} === null`,
       );
     }
-    this.data.serialize.beginControlFlow("if (!reachedNullOptional)");
+    this.data.serialize.beginControlFlow('if (!reachedNullOptional)');
   }
 
   private generateSerializeNullNotAllowedError(): void {
@@ -383,7 +383,7 @@ class FieldCodeGenerator {
         `throw new SerializationError("${tsName} must not be null.")`,
       )
       .endControlFlow()
-      .addImport("SerializationError", "protocol/serialization-error.js");
+      .addImport('SerializationError', 'protocol/serialization-error.js');
   }
 
   private generateSerializeLengthCheck(): void {
@@ -408,19 +408,19 @@ class FieldCodeGenerator {
 
     const tsName = snakeCaseToCamelCase(this.name);
     const variableSize = this.padded || !!fieldData;
-    const lengthCheckOperator = variableSize ? ">" : "!==";
+    const lengthCheckOperator = variableSize ? '>' : '!==';
     const expectedLengthDescription = variableSize
       ? `${lengthExpression} or less`
       : `exactly ${lengthExpression}`;
 
     const errorMessage =
-      "Expected " +
+      'Expected ' +
       tsName +
-      ".length to be " +
+      '.length to be ' +
       expectedLengthDescription +
-      ", got ${data." +
+      ', got ${data.' +
       tsName +
-      ".length}.";
+      '.length}.';
 
     this.data.serialize
       .beginControlFlow(
@@ -428,7 +428,7 @@ class FieldCodeGenerator {
       )
       .addStatement(`throw new SerializationError(\`${errorMessage}\`)`)
       .endControlFlow()
-      .addImport("SerializationError", "protocol/serialization-error.js");
+      .addImport('SerializationError', 'protocol/serialization-error.js');
   }
 
   private getWriteStatement(): CodeBlock {
@@ -441,7 +441,7 @@ class FieldCodeGenerator {
 
     let valueExpression = this.getWriteValueExpression();
     if (realType instanceof BoolType) {
-      valueExpression += " ? 1 : 0";
+      valueExpression += ' ? 1 : 0';
     }
 
     const offsetExpression = FieldCodeGenerator.getLengthOffsetExpression(
@@ -474,7 +474,7 @@ class FieldCodeGenerator {
         .addStatement(`${type.name}.serialize(writer, ${valueExpression})`)
         .addImportByType(type);
     }
-    throw new Error("Unhandled Type");
+    throw new Error('Unhandled Type');
   }
 
   private getWriteValueExpression(): string {
@@ -490,10 +490,10 @@ class FieldCodeGenerator {
       }
       if (type instanceof BoolType) {
         switch (this.hardcodedValue) {
-          case "false":
-            return "0";
-          case "true":
-            return "1";
+          case 'false':
+            return '0';
+          case 'true':
+            return '1';
           default:
             throw new Error(
               `"${this.hardcodedValue}" is not a valid bool value.`,
@@ -503,11 +503,11 @@ class FieldCodeGenerator {
       if (type instanceof StringType) {
         return `"${this.hardcodedValue}"`;
       }
-      throw new Error("Unhandled BasicType");
+      throw new Error('Unhandled BasicType');
     }
-    let fieldReference = "data._" + snakeCaseToCamelCase(this.name);
+    let fieldReference = 'data._' + snakeCaseToCamelCase(this.name);
     if (this.arrayField) {
-      fieldReference += "[i]";
+      fieldReference += '[i]';
     }
     return fieldReference;
   }
@@ -519,34 +519,34 @@ class FieldCodeGenerator {
     padded: boolean,
   ): string {
     switch (type.name) {
-      case "byte":
+      case 'byte':
         return `writer.addByte(${valueExpression})`;
-      case "char":
+      case 'char':
         return `writer.addChar(${valueExpression})`;
-      case "short":
+      case 'short':
         return `writer.addShort(${valueExpression})`;
-      case "three":
+      case 'three':
         return `writer.addThree(${valueExpression})`;
-      case "int":
+      case 'int':
         return `writer.addInt(${valueExpression})`;
-      case "string":
+      case 'string':
         if (lengthExpression === null) {
           return `writer.addString(${valueExpression})`;
         }
         return `writer.addFixedString(${valueExpression}, ${lengthExpression}, ${padded})`;
-      case "encoded_string":
+      case 'encoded_string':
         if (lengthExpression === null) {
           return `writer.addEncodedString(${valueExpression})`;
         }
         return `writer.addFixedEncodedString(${valueExpression}, ${lengthExpression}, ${padded})`;
       default:
-        throw new Error("Unhandled BasicType");
+        throw new Error('Unhandled BasicType');
     }
   }
 
   public generateDeserialize(): void {
     if (this.optional) {
-      this.data.deserialize.beginControlFlow("if (reader.remaining > 0)");
+      this.data.deserialize.beginControlFlow('if (reader.remaining > 0)');
     }
 
     if (this.arrayField) {
@@ -567,7 +567,7 @@ class FieldCodeGenerator {
     if (arrayLengthExpression === null && !this.delimited) {
       const elementSize = this.getType().fixedSize;
       if (elementSize !== null) {
-        const arrayLengthVariableName = tsName + "Length";
+        const arrayLengthVariableName = tsName + 'Length';
         this.data.deserialize.addStatement(
           `const ${arrayLengthVariableName} = Math.trunc(reader.remaining / ${elementSize})`,
         );
@@ -578,7 +578,7 @@ class FieldCodeGenerator {
     this.data.deserialize.addStatement(`data._${tsName} = []`);
 
     if (arrayLengthExpression === null) {
-      this.data.deserialize.beginControlFlow("while (reader.remaining > 0)");
+      this.data.deserialize.beginControlFlow('while (reader.remaining > 0)');
     } else {
       this.data.deserialize.beginControlFlow(
         `for (let i = 0; i < ${arrayLengthExpression}; ++i)`,
@@ -596,7 +596,7 @@ class FieldCodeGenerator {
         );
       }
 
-      this.data.deserialize.addStatement("reader.nextChunk()");
+      this.data.deserialize.addStatement('reader.nextChunk()');
 
       if (needsGuard) {
         this.data.deserialize.endControlFlow();
@@ -647,18 +647,18 @@ class FieldCodeGenerator {
         statement.add(readBasicType);
       }
     } else if (type instanceof BlobType) {
-      statement.add("reader.getBytes(reader.remaining)");
+      statement.add('reader.getBytes(reader.remaining)');
     } else if (type instanceof StructType) {
       statement.add(`${type.name}.deserialize(reader)`).addImportByType(type);
     } else {
-      throw new Error("Unhandled Type");
+      throw new Error('Unhandled Type');
     }
 
     if (this.arrayField) {
-      statement.add(")");
+      statement.add(')');
     }
 
-    return statement.add(";\n");
+    return statement.add(';\n');
   }
 
   private static getReadStatementForBasicType(
@@ -667,28 +667,28 @@ class FieldCodeGenerator {
     padded: boolean,
   ): string {
     switch (type.name) {
-      case "byte":
-        return "reader.getByte()";
-      case "char":
-        return "reader.getChar()";
-      case "short":
-        return "reader.getShort()";
-      case "three":
-        return "reader.getThree()";
-      case "int":
-        return "reader.getInt()";
-      case "string":
+      case 'byte':
+        return 'reader.getByte()';
+      case 'char':
+        return 'reader.getChar()';
+      case 'short':
+        return 'reader.getShort()';
+      case 'three':
+        return 'reader.getThree()';
+      case 'int':
+        return 'reader.getInt()';
+      case 'string':
         if (lengthExpression === null) {
-          return "reader.getString()";
+          return 'reader.getString()';
         }
         return `reader.getFixedString(${lengthExpression}, ${padded})`;
-      case "encoded_string":
+      case 'encoded_string':
         if (lengthExpression === null) {
-          return "reader.getEncodedString()";
+          return 'reader.getEncodedString()';
         }
         return `reader.getFixedEncodedString(${lengthExpression}, ${padded})`;
       default:
-        throw new Error("Unhandled BasicType");
+        throw new Error('Unhandled BasicType');
     }
   }
 
@@ -711,21 +711,21 @@ class FieldCodeGenerator {
   private getTsTypeName(): string {
     const type = this.getType();
     if (type instanceof IntegerType) {
-      return "number";
+      return 'number';
     }
     if (type instanceof StringType) {
-      return "string";
+      return 'string';
     }
     if (type instanceof BoolType) {
-      return "boolean";
+      return 'boolean';
     }
     if (type instanceof BlobType) {
-      return "Uint8Array";
+      return 'Uint8Array';
     }
     if (isCustomType(type)) {
       return type.name;
     }
-    throw new Error("Unhandled Type");
+    throw new Error('Unhandled Type');
   }
 
   private getLengthExpression(): string {
@@ -745,7 +745,7 @@ class FieldCodeGenerator {
 
   private static getLengthOffsetExpression(offset: number): string {
     if (offset !== 0) {
-      return ` ${offset > 0 ? "+" : "-"} ${Math.abs(offset)}`;
+      return ` ${offset > 0 ? '+' : '-'} ${Math.abs(offset)}`;
     }
     return null;
   }
@@ -840,7 +840,7 @@ export class FieldCodeGeneratorBuilder {
 
   public build(): FieldCodeGenerator {
     if (this.type === null) {
-      throw new Error("type must be provided");
+      throw new Error('type must be provided');
     }
     return new FieldCodeGenerator(
       this.typeFactory,
@@ -863,5 +863,5 @@ export class FieldCodeGeneratorBuilder {
 }
 
 function getMaxValueOf(type: IntegerType): number {
-  return type.name === "byte" ? 255 : 253 ** type.fixedSize - 1;
+  return type.name === 'byte' ? 255 : 253 ** type.fixedSize - 1;
 }

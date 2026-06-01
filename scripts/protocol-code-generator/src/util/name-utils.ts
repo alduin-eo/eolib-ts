@@ -1,7 +1,7 @@
-import { capitalize, isLowerCase, isUpperCase } from "./string-utils";
+import { capitalize, isLowerCase, isUpperCase } from './string-utils';
 
 export function pascalCaseToKebabCase(name: string): string {
-  let result = "";
+  let result = '';
   for (let i = 0; i < name.length; ++i) {
     const c = name.charAt(i);
     if (
@@ -10,7 +10,7 @@ export function pascalCaseToKebabCase(name: string): string {
       ((i + 1 < name.length && !isUpperCase(name.charAt(i + 1))) ||
         isLowerCase(name.charAt(i - 1)))
     ) {
-      result += "-";
+      result += '-';
     }
     result += c.toLowerCase();
   }
@@ -18,11 +18,11 @@ export function pascalCaseToKebabCase(name: string): string {
 }
 
 export function snakeCaseToCamelCase(name: string): string {
-  let result = "";
+  let result = '';
   let uppercaseNext = false;
   for (let i = 0; i < name.length; ++i) {
     let c = name.charAt(i);
-    if (c === "_") {
+    if (c === '_') {
       uppercaseNext = result.length > 0;
       continue;
     }

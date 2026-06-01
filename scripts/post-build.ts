@@ -1,11 +1,11 @@
-import chalk from "chalk";
-import * as fs from "fs";
-import * as path from "path";
-import { replaceTscAliasPaths } from "tsc-alias";
+import chalk from 'chalk';
+import * as fs from 'fs';
+import * as path from 'path';
+import { replaceTscAliasPaths } from 'tsc-alias';
 
 async function main() {
   const buildType = process.argv[2];
-  if (buildType !== "esm" && buildType !== "cjs") {
+  if (buildType !== 'esm' && buildType !== 'cjs') {
     throw new Error(`Unknown build type: "${buildType}"`);
   }
 
@@ -18,7 +18,7 @@ async function main() {
   const generatedTypes = `${out}/types/generated/`;
   const srcTypes = `${out}/types/src/`;
 
-  console.log(`Processing ${chalk.bold("declaration files")}.`);
+  console.log(`Processing ${chalk.bold('declaration files')}.`);
   fs.cpSync(generatedTypes, srcTypes, { recursive: true });
   fs.rmSync(generatedTypes, { recursive: true, force: true });
   await replaceTscAliasPaths({
@@ -30,18 +30,18 @@ async function main() {
   const generated = `${out}/generated/`;
   const src = `${out}/src/`;
 
-  console.log(`Processing ${chalk.bold("compiled source files")}.`);
+  console.log(`Processing ${chalk.bold('compiled source files')}.`);
   fs.cpSync(generated, src, { recursive: true });
   fs.rmSync(generated, { recursive: true, force: true });
   await replaceTscAliasPaths({ configFile, declarationDir: undefined });
 
-  console.log(`Generating ${chalk.bold("package.json override")}.`);
+  console.log(`Generating ${chalk.bold('package.json override')}.`);
   fs.writeFileSync(
     `${out}/package.json`,
-    `{\n  "type": "${buildType === "cjs" ? "commonjs" : "module"}"\n}`,
+    `{\n  "type": "${buildType === 'cjs' ? 'commonjs' : 'module'}"\n}`,
   );
 
-  console.log(chalk.green("Build completed successfully."));
+  console.log(chalk.green('Build completed successfully.'));
 }
 
 main();

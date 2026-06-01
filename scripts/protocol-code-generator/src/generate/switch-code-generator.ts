@@ -1,23 +1,23 @@
-import type { XmlElement } from "@rgrove/parse-xml";
-import { EnumType } from "../type/enum-type";
-import { IntegerType } from "../type/integer-type";
-import type { TypeFactory } from "../type/type-factory";
-import { generateTsDoc } from "../util/doc-utils";
-import { snakeCaseToPascalCase } from "../util/name-utils";
-import { isInteger, tryParseInt } from "../util/number-utils";
+import type { XmlElement } from '@rgrove/parse-xml';
+import { EnumType } from '../type/enum-type';
+import { IntegerType } from '../type/integer-type';
+import type { TypeFactory } from '../type/type-factory';
+import { generateTsDoc } from '../util/doc-utils';
+import { snakeCaseToPascalCase } from '../util/name-utils';
+import { isInteger, tryParseInt } from '../util/number-utils';
 import {
   getBooleanAttribute,
   getComment,
   getInstructions,
   getRequiredStringAttribute,
-} from "../util/xml-utils";
-import { CodeBlock } from "./code-block";
+} from '../util/xml-utils';
+import { CodeBlock } from './code-block';
 import {
   type FieldData,
   ObjectCodeGenerator,
   type ObjectGenerationContext,
   type ObjectGenerationData,
-} from "./object-code-generator";
+} from './object-code-generator';
 
 export class SwitchCodeGenerator {
   private readonly fieldName: string;
@@ -41,9 +41,9 @@ export class SwitchCodeGenerator {
     const unionTypeNames = protocolCases
       .filter((protocolCase) => getInstructions(protocolCase).length > 0)
       .map((protocolCase) => this.getCaseDataTypeName(protocolCase));
-    unionTypeNames.push("null");
+    unionTypeNames.push('null');
 
-    const unionType = unionTypeNames.join(" | ");
+    const unionType = unionTypeNames.join(' | ');
     const fieldName = this.getFieldData().tsName;
     const tsDoc = `/**
  * Data associated with different values of the \`${fieldName}\` field
@@ -59,7 +59,7 @@ export class SwitchCodeGenerator {
 
   public generateCaseDataField(): void {
     const interfaceTypeName =
-      this.data.className + "." + this.getInterfaceTypeName();
+      this.data.className + '.' + this.getInterfaceTypeName();
     const caseDataFieldName = this.getCaseDataFieldName();
     const switchFieldName = this.getFieldData().tsName;
 
@@ -82,7 +82,7 @@ export class SwitchCodeGenerator {
         .indent()
         .addStatement(`return this._${caseDataFieldName}`)
         .unindent()
-        .addLine("}"),
+        .addLine('}'),
     );
 
     const setterTsDoc = `/**
@@ -102,15 +102,15 @@ export class SwitchCodeGenerator {
         .indent()
         .addStatement(`this._${caseDataFieldName} = ${caseDataFieldName}`)
         .unindent()
-        .addLine("}"),
+        .addLine('}'),
     );
   }
 
   public generateSwitchStart(): void {
     const fieldData = this.getFieldData();
-    let switchValueExpression = "data." + fieldData.tsName;
+    let switchValueExpression = 'data.' + fieldData.tsName;
     if (fieldData.type instanceof EnumType) {
-      switchValueExpression = "+" + switchValueExpression;
+      switchValueExpression = '+' + switchValueExpression;
     }
     this.data.serialize.beginControlFlow(`switch (${switchValueExpression})`);
     this.data.deserialize.beginControlFlow(`switch (${switchValueExpression})`);
@@ -119,9 +119,9 @@ export class SwitchCodeGenerator {
   public generateCase(protocolCase: XmlElement): ObjectGenerationContext {
     const fieldData = this.getFieldData();
     const caseDataTypeName = this.getCaseDataTypeName(protocolCase);
-    if (getBooleanAttribute(protocolCase, "default")) {
-      this.data.serialize.addLine("default:").indent();
-      this.data.deserialize.addLine("default:").indent();
+    if (getBooleanAttribute(protocolCase, 'default')) {
+      this.data.serialize.addLine('default:').indent();
+      this.data.deserialize.addLine('default:').indent();
     } else {
       const caseValueExpression = this.getCaseValueExpression(protocolCase);
       this.data.serialize.addLine(`case ${caseValueExpression}:`).indent();
@@ -138,13 +138,13 @@ export class SwitchCodeGenerator {
       this.data.serialize
         .beginControlFlow(`if (data._${caseDataFieldName} !== null)`)
         .addStatement(
-          "throw new SerializationError(" +
+          'throw new SerializationError(' +
             `"Expected ${caseDataFieldName} to be null ` +
             `for ${fieldData.tsName} " + data._${fieldData.tsName} + "."` +
-            ")",
+            ')',
         )
         .endControlFlow()
-        .addImport("SerializationError", "protocol/serialization-error.js");
+        .addImport('SerializationError', 'protocol/serialization-error.js');
 
       this.data.deserialize.addStatement(`data._${caseDataFieldName} = null`);
     } else {
@@ -157,24 +157,24 @@ export class SwitchCodeGenerator {
           `if (!(data._${caseDataFieldName} instanceof ${this.data.className}.${caseDataTypeName}))`,
         )
         .addStatement(
-          "throw new SerializationError(" +
+          'throw new SerializationError(' +
             `"Expected ${caseDataFieldName} to be type ${caseDataTypeName} ` +
             `for ${fieldData.tsName} " + data._${fieldData.tsName} + "."` +
-            ")",
+            ')',
         )
         .endControlFlow()
         .addStatement(
           `${this.data.className}.${caseDataTypeName}.serialize(writer, data._${caseDataFieldName})`,
         )
-        .addImport("SerializationError", "protocol/serialization-error.js");
+        .addImport('SerializationError', 'protocol/serialization-error.js');
 
       this.data.deserialize.addStatement(
         `data._${caseDataFieldName} = ${this.data.className}.${caseDataTypeName}.deserialize(reader)`,
       );
     }
 
-    this.data.serialize.addStatement("break").unindent();
-    this.data.deserialize.addStatement("break").unindent();
+    this.data.serialize.addStatement('break').unindent();
+    this.data.deserialize.addStatement('break').unindent();
 
     return caseContext;
   }
@@ -198,17 +198,17 @@ export class SwitchCodeGenerator {
     );
 
     const fieldData = this.getFieldData();
-    let comment = getBooleanAttribute(protocolCase, "default")
+    let comment = getBooleanAttribute(protocolCase, 'default')
       ? `Default data associated with \`${fieldData.tsName}\``
-      : "Data associated with `" +
+      : 'Data associated with `' +
         fieldData.tsName +
-        "` value `" +
+        '` value `' +
         this.getCaseValueExpression(protocolCase) +
-        "`";
+        '`';
 
     const protocolComment = getComment(protocolCase);
     if (protocolComment !== null) {
-      comment += "\n\n";
+      comment += '\n\n';
       comment += protocolComment;
     }
 
@@ -231,20 +231,20 @@ export class SwitchCodeGenerator {
   }
 
   private getInterfaceTypeName(): string {
-    return snakeCaseToPascalCase(this.fieldName) + "Data";
+    return snakeCaseToPascalCase(this.fieldName) + 'Data';
   }
 
   private getCaseDataFieldName(): string {
-    return this.getFieldData().tsName + "Data";
+    return this.getFieldData().tsName + 'Data';
   }
 
   private getCaseDataTypeName(protocolCase: XmlElement): string {
-    const isDefault = getBooleanAttribute(protocolCase, "default");
+    const isDefault = getBooleanAttribute(protocolCase, 'default');
     return (
       this.getInterfaceTypeName() +
       (isDefault
-        ? "Default"
-        : getRequiredStringAttribute(protocolCase, "value"))
+        ? 'Default'
+        : getRequiredStringAttribute(protocolCase, 'value'))
     );
   }
 
@@ -258,7 +258,7 @@ export class SwitchCodeGenerator {
     }
 
     const fieldType = fieldData.type;
-    const caseValue = getRequiredStringAttribute(protocolCase, "value");
+    const caseValue = getRequiredStringAttribute(protocolCase, 'value');
 
     if (fieldType instanceof IntegerType) {
       if (!isInteger(caseValue)) {

@@ -1,9 +1,9 @@
-import type { Type } from "./type";
+import type { Type } from './type';
 
 export interface BasicType extends Type {
-  typeKind: "basic";
+  typeKind: 'basic';
 }
 
 export function isBasicType(object: any): object is BasicType {
-  return object.typeKind === "basic";
+  return object.typeKind === 'basic';
 }

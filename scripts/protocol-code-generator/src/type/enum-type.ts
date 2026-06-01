@@ -1,5 +1,5 @@
-import type { CustomType } from "./custom-type";
-import type { IntegerType } from "./integer-type";
+import type { CustomType } from './custom-type';
+import type { IntegerType } from './integer-type';
 
 export class EnumType implements CustomType {
   private readonly _name: string;
@@ -19,8 +19,8 @@ export class EnumType implements CustomType {
     this._values = values;
   }
 
-  public get typeKind(): "custom" {
-    return "custom";
+  public get typeKind(): 'custom' {
+    return 'custom';
   }
 
   public get name(): string {

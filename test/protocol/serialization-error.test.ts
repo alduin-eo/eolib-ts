@@ -1,11 +1,11 @@
-import { SerializationError } from "@eolib/protocol/serialization-error.js";
+import { SerializationError } from '@eolib/protocol/serialization-error.js';
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from 'vitest';
 
-describe("SerializationError", () => {
-  describe("#message", () => {
-    it("should return the message provided at construction", () => {
-      const message = "Oh no, the sun exploded!";
+describe('SerializationError', () => {
+  describe('#message', () => {
+    it('should return the message provided at construction', () => {
+      const message = 'Oh no, the sun exploded!';
       expect(new SerializationError(message).message).toStrictEqual(message);
     });
   });

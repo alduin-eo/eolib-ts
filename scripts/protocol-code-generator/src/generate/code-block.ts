@@ -1,7 +1,7 @@
-import * as path from "path";
+import * as path from 'path';
 
-import type { CustomType } from "../type/custom-type";
-import { pascalCaseToKebabCase } from "../util/name-utils";
+import type { CustomType } from '../type/custom-type';
+import { pascalCaseToKebabCase } from '../util/name-utils';
 
 export class CodeBlock {
   private readonly imports: Set<string>;
@@ -10,28 +10,28 @@ export class CodeBlock {
 
   public constructor() {
     this.imports = new Set();
-    this.lines = [""];
+    this.lines = [''];
     this.indentation = 0;
   }
 
   public add(code: string): this {
-    const parts = code.split("\n");
+    const parts = code.split('\n');
     for (let i = 0; i < parts.length; ++i) {
       if (parts[i].length > 0) {
         const lineIndex = this.lines.length - 1;
         if (this.lines[lineIndex].length === 0) {
-          this.lines[lineIndex] = " ".repeat(this.indentation * 2);
+          this.lines[lineIndex] = ' '.repeat(this.indentation * 2);
         }
         this.lines[lineIndex] += parts[i];
       }
       if (i !== parts.length - 1) {
-        this.lines.push("");
+        this.lines.push('');
       }
     }
     return this;
   }
 
-  public addLine(line = ""): this {
+  public addLine(line = ''): this {
     this.add(`${line}\n`);
     return this;
   }
@@ -62,7 +62,7 @@ export class CodeBlock {
       type.name,
       path.posix.join(
         type.sourcePath,
-        pascalCaseToKebabCase(type.name) + ".js",
+        pascalCaseToKebabCase(type.name) + '.js',
       ),
     );
     return this;
@@ -74,25 +74,25 @@ export class CodeBlock {
   }
 
   public beginControlFlow(controlFlow: string): this {
-    this.addLine(controlFlow + " {");
+    this.addLine(controlFlow + ' {');
     this.indent();
     return this;
   }
 
   public nextControlFlow(controlFlow: string): this {
     this.unindent();
-    this.addLine("} " + controlFlow + " {");
+    this.addLine('} ' + controlFlow + ' {');
     this.indent();
     return this;
   }
 
-  public endControlFlow(controlFlow = ""): this {
+  public endControlFlow(controlFlow = ''): this {
     this.unindent();
-    this.add("}");
+    this.add('}');
     if (controlFlow) {
       this.add(` ${controlFlow};`);
     }
-    this.add("\n");
+    this.add('\n');
     return this;
   }
 
@@ -111,17 +111,17 @@ export class CodeBlock {
   }
 
   public toString(): string {
-    let result = "";
+    let result = '';
     for (const i of this.imports) {
-      result += i + "\n";
+      result += i + '\n';
     }
 
     if (!this.empty) {
       if (result.length > 0) {
-        result += "\n";
+        result += '\n';
       }
 
-      result += this.lines.join("\n");
+      result += this.lines.join('\n');
     }
 
     return result;

@@ -1,5 +1,5 @@
-import { AbstractSequenceStart } from "./abstract-sequence-start.js";
-import { randBetween } from "./random-utils.js";
+import { AbstractSequenceStart } from './abstract-sequence-start.js';
+import { randBetween } from './random-utils.js';
 
 /**
  * A class representing the sequence start value sent with the ACCOUNT_REPLY server packet.

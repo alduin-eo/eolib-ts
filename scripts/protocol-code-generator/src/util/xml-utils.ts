@@ -1,5 +1,5 @@
-import { XmlElement, XmlNode, type XmlText } from "@rgrove/parse-xml";
-import { tryParseInt } from "./number-utils";
+import { XmlElement, XmlNode, type XmlText } from '@rgrove/parse-xml';
+import { tryParseInt } from './number-utils';
 
 export function getInstructions(element: XmlElement): Array<XmlElement> {
   return element.children.filter((child) => {
@@ -7,13 +7,13 @@ export function getInstructions(element: XmlElement): Array<XmlElement> {
       return false;
     }
     switch (child.name) {
-      case "field":
-      case "array":
-      case "length":
-      case "dummy":
-      case "switch":
-      case "chunked":
-      case "break":
+      case 'field':
+      case 'array':
+      case 'length':
+      case 'dummy':
+      case 'switch':
+      case 'chunked':
+      case 'break':
         return true;
       default:
         return false;
@@ -23,7 +23,7 @@ export function getInstructions(element: XmlElement): Array<XmlElement> {
 
 export function getComment(element: XmlElement): string | null {
   const commentElement: XmlElement = element.children.find(
-    (child) => child instanceof XmlElement && child.name === "comment",
+    (child) => child instanceof XmlElement && child.name === 'comment',
   ) as XmlElement;
 
   if (commentElement) {
@@ -34,7 +34,7 @@ export function getComment(element: XmlElement): string | null {
 }
 
 export function getText(element: XmlElement): string | null {
-  let result = "";
+  let result = '';
 
   for (const child of element.children) {
     if (child.type === XmlNode.TYPE_TEXT) {
@@ -43,7 +43,7 @@ export function getText(element: XmlElement): string | null {
         continue;
       }
 
-      if (result !== "") {
+      if (result !== '') {
         throw new Error(`Unexpected text content "${text}"`);
       }
 
@@ -93,7 +93,7 @@ export function getBooleanAttribute(
   if (attributeText === undefined) {
     return defaultValue;
   }
-  return attributeText.toLowerCase() === "true";
+  return attributeText.toLowerCase() === 'true';
 }
 
 export function getRequiredStringAttribute(

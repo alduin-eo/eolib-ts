@@ -1,1 +1,1 @@
-export { ProtocolCodeGenerator } from "./generate/code-generator";
+export { ProtocolCodeGenerator } from './generate/code-generator';

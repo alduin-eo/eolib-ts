@@ -57,7 +57,7 @@ export function encode1252(str: string): Uint8Array {
 }
 
 export function decode1252(bytes: Uint8Array): string {
-  let result = "";
+  let result = '';
   for (const byte of bytes) {
     let code: number;
     if (byte < 0x80 || byte > 0x9f) {

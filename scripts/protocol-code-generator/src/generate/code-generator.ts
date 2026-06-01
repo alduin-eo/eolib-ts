@@ -1,21 +1,21 @@
-import { parseXml, type XmlDocument, XmlElement } from "@rgrove/parse-xml";
-import chalk from "chalk";
-import * as fs from "fs";
-import * as path from "path";
-import { EnumType, type EnumValue } from "../type/enum-type";
-import type { StructType } from "../type/struct-type";
-import { TypeFactory } from "../type/type-factory";
-import { generateTsDoc } from "../util/doc-utils";
-import { findFiles } from "../util/fs-utils";
-import { pascalCaseToKebabCase } from "../util/name-utils";
+import { parseXml, type XmlDocument, XmlElement } from '@rgrove/parse-xml';
+import chalk from 'chalk';
+import * as fs from 'fs';
+import * as path from 'path';
+import { EnumType, type EnumValue } from '../type/enum-type';
+import type { StructType } from '../type/struct-type';
+import { TypeFactory } from '../type/type-factory';
+import { generateTsDoc } from '../util/doc-utils';
+import { findFiles } from '../util/fs-utils';
+import { pascalCaseToKebabCase } from '../util/name-utils';
 import {
   getComment,
   getInstructions,
   getRequiredStringAttribute,
-} from "../util/xml-utils";
-import { CodeBlock } from "./code-block";
-import { ObjectCodeGenerator } from "./object-code-generator";
-import { TSFile } from "./ts-file";
+} from '../util/xml-utils';
+import { CodeBlock } from './code-block';
+import { ObjectCodeGenerator } from './object-code-generator';
+import { TSFile } from './ts-file';
 
 export class ProtocolCodeGenerator {
   private readonly inputRoot: string;
@@ -50,50 +50,50 @@ export class ProtocolCodeGenerator {
   private indexProtocolFiles(): void {
     findFiles(
       this.inputRoot,
-      (file) => path.basename(file) === "protocol.xml",
+      (file) => path.basename(file) === 'protocol.xml',
     ).forEach(this.indexProtocolFile, this);
   }
 
   private indexProtocolFile(file: string): void {
-    console.log(`${chalk.yellow("Indexing")} ${file}`);
+    console.log(`${chalk.yellow('Indexing')} ${file}`);
 
     try {
-      const xml: string = fs.readFileSync(file, "utf-8");
+      const xml: string = fs.readFileSync(file, 'utf-8');
       const document: XmlDocument = parseXml(xml);
 
       const protocolElements = document.children.filter(
         (element) =>
-          element instanceof XmlElement && element.name === "protocol",
+          element instanceof XmlElement && element.name === 'protocol',
       ) as XmlElement[];
 
       if (protocolElements.length === 0) {
-        throw new Error("Expected a root <protocol> element.");
+        throw new Error('Expected a root <protocol> element.');
       }
 
       const protocol: XmlElement = protocolElements[0];
       this.protocolFiles.push(protocol);
 
       const enumElements = protocol.children.filter(
-        (element) => element instanceof XmlElement && element.name === "enum",
+        (element) => element instanceof XmlElement && element.name === 'enum',
       ) as XmlElement[];
 
       const structElements = protocol.children.filter(
-        (element) => element instanceof XmlElement && element.name === "struct",
+        (element) => element instanceof XmlElement && element.name === 'struct',
       ) as XmlElement[];
 
       const packetElements = protocol.children.filter(
-        (element) => element instanceof XmlElement && element.name === "packet",
+        (element) => element instanceof XmlElement && element.name === 'packet',
       ) as XmlElement[];
 
       const sourcePath =
-        "protocol/" + path.dirname(path.posix.relative(this.inputRoot, file));
+        'protocol/' + path.dirname(path.posix.relative(this.inputRoot, file));
 
       for (const protocolEnum of enumElements) {
         if (!this.typeFactory.defineCustomType(protocolEnum, sourcePath)) {
           throw new Error(
             `${getRequiredStringAttribute(
               protocolEnum,
-              "name",
+              'name',
             )} type cannot be redefined.`,
           );
         }
@@ -104,7 +104,7 @@ export class ProtocolCodeGenerator {
           throw new Error(
             `${getRequiredStringAttribute(
               protocolStruct,
-              "name",
+              'name',
             )} type cannot be redefined.`,
           );
         }
@@ -113,9 +113,9 @@ export class ProtocolCodeGenerator {
       const declaredPackets: Set<string> = new Set();
       for (const protocolPacket of packetElements) {
         const packetIdentifier =
-          getRequiredStringAttribute(protocolPacket, "family") +
-          "_" +
-          getRequiredStringAttribute(protocolPacket, "action");
+          getRequiredStringAttribute(protocolPacket, 'family') +
+          '_' +
+          getRequiredStringAttribute(protocolPacket, 'action');
 
         if (declaredPackets.has(packetIdentifier)) {
           throw new Error(
@@ -138,15 +138,15 @@ export class ProtocolCodeGenerator {
 
   private generateSourceFile(protocol: XmlElement): void {
     const enumElements = protocol.children.filter(
-      (element) => element instanceof XmlElement && element.name === "enum",
+      (element) => element instanceof XmlElement && element.name === 'enum',
     ) as XmlElement[];
 
     const structElements = protocol.children.filter(
-      (element) => element instanceof XmlElement && element.name === "struct",
+      (element) => element instanceof XmlElement && element.name === 'struct',
     ) as XmlElement[];
 
     const packetElements = protocol.children.filter(
-      (element) => element instanceof XmlElement && element.name === "packet",
+      (element) => element instanceof XmlElement && element.name === 'packet',
     ) as XmlElement[];
 
     const tsFiles: TSFile[] = [
@@ -160,10 +160,10 @@ export class ProtocolCodeGenerator {
 
   private generateEnum(protocolEnum: XmlElement): TSFile {
     const type = this.typeFactory.getType(
-      getRequiredStringAttribute(protocolEnum, "name"),
+      getRequiredStringAttribute(protocolEnum, 'name'),
     ) as EnumType;
 
-    console.log(`${chalk.blue("Generating enum")}: ${type.name}`);
+    console.log(`${chalk.blue('Generating enum')}: ${type.name}`);
 
     const codeBlock = new CodeBlock()
       .addCodeBlock(generateTsDoc(getComment(protocolEnum)))
@@ -172,32 +172,32 @@ export class ProtocolCodeGenerator {
 
     protocolEnum.children
       .filter((child) => child instanceof XmlElement)
-      .filter((child) => child.name === "value")
+      .filter((child) => child.name === 'value')
       .forEach((protocolValue) => {
-        const valueName = getRequiredStringAttribute(protocolValue, "name");
+        const valueName = getRequiredStringAttribute(protocolValue, 'name');
         const value: EnumValue = type.getEnumValueByName(valueName);
         codeBlock
           .addCodeBlock(generateTsDoc(getComment(protocolValue)))
           .addLine(`${value.name} = ${value.ordinalValue},`);
       });
 
-    codeBlock.unindent().addLine("}");
+    codeBlock.unindent().addLine('}');
 
     const relativePath = path.posix.join(
       type.sourcePath,
       pascalCaseToKebabCase(type.name),
     );
-    this.exports.push(relativePath + ".js");
+    this.exports.push(relativePath + '.js');
 
-    return new TSFile(relativePath + ".ts", codeBlock);
+    return new TSFile(relativePath + '.ts', codeBlock);
   }
 
   private generateStruct(protocolStruct: XmlElement): TSFile {
     const type = this.typeFactory.getType(
-      getRequiredStringAttribute(protocolStruct, "name"),
+      getRequiredStringAttribute(protocolStruct, 'name'),
     ) as StructType;
 
-    console.log(`${chalk.green("Generating struct")}: ${type.name}`);
+    console.log(`${chalk.green('Generating struct')}: ${type.name}`);
 
     const objectCodeGenerator = new ObjectCodeGenerator(
       type.name,
@@ -213,10 +213,10 @@ export class ProtocolCodeGenerator {
       type.sourcePath,
       pascalCaseToKebabCase(type.name),
     );
-    this.exports.push(relativePath + ".js");
+    this.exports.push(relativePath + '.js');
 
     return new TSFile(
-      relativePath + ".ts",
+      relativePath + '.ts',
       new CodeBlock()
         .addCodeBlock(generateTsDoc(getComment(protocolStruct)))
         .addCodeBlock(objectCodeGenerator.code),
@@ -228,24 +228,24 @@ export class ProtocolCodeGenerator {
     const packetSuffix = ProtocolCodeGenerator.makePacketSuffix(sourcePath);
     const familyAttribute = getRequiredStringAttribute(
       protocolPacket,
-      "family",
+      'family',
     );
     const actionAttribute = getRequiredStringAttribute(
       protocolPacket,
-      "action",
+      'action',
     );
     const packetTypeName = familyAttribute + actionAttribute + packetSuffix;
 
-    console.log(`${chalk.magenta("Generating packet")}: ${packetTypeName}`);
+    console.log(`${chalk.magenta('Generating packet')}: ${packetTypeName}`);
 
-    const familyType = this.typeFactory.getType("PacketFamily");
+    const familyType = this.typeFactory.getType('PacketFamily');
     if (!(familyType instanceof EnumType)) {
-      throw new Error("PacketFamily enum is missing.");
+      throw new Error('PacketFamily enum is missing.');
     }
 
-    const actionType = this.typeFactory.getType("PacketAction");
+    const actionType = this.typeFactory.getType('PacketAction');
     if (!(actionType instanceof EnumType)) {
-      throw new Error("PacketAction enum is missing.");
+      throw new Error('PacketAction enum is missing.');
     }
 
     const familyEnumValue = familyType.getEnumValueByName(familyAttribute);
@@ -282,60 +282,60 @@ export class ProtocolCodeGenerator {
 `;
 
     const data = objectCodeGenerator.data;
-    data.superInterfaces.push("Packet");
+    data.superInterfaces.push('Packet');
     data.addMethod(
       new CodeBlock()
         .add(familyTsDoc)
-        .addLine("public static get family(): PacketFamily {")
+        .addLine('public static get family(): PacketFamily {')
         .indent()
         .addStatement(`return ${familyType.name}.${familyEnumValue.name}`)
         .unindent()
-        .addLine("}")
+        .addLine('}')
         .addImportByType(familyType),
     );
     data.addMethod(
       new CodeBlock()
         .add(actionTsDoc)
-        .addLine("public static get action(): PacketAction {")
+        .addLine('public static get action(): PacketAction {')
         .indent()
         .addStatement(`return ${actionType.name}.${actionEnumValue.name}`)
         .unindent()
-        .addLine("}")
+        .addLine('}')
         .addImportByType(actionType),
     );
     data.addMethod(
       new CodeBlock()
-        .addLine("public get family(): PacketFamily {")
+        .addLine('public get family(): PacketFamily {')
         .indent()
         .addStatement(`return ${packetTypeName}.family`)
         .unindent()
-        .addLine("}"),
+        .addLine('}'),
     );
     data.addMethod(
       new CodeBlock()
-        .addLine("public get action(): PacketAction {")
+        .addLine('public get action(): PacketAction {')
         .indent()
         .addStatement(`return ${packetTypeName}.action`)
         .unindent()
-        .addLine("}"),
+        .addLine('}'),
     );
     data.addMethod(
       new CodeBlock()
-        .addLine("public serialize(writer: EoWriter): void {")
+        .addLine('public serialize(writer: EoWriter): void {')
         .indent()
         .addStatement(`${packetTypeName}.serialize(writer, this)`)
         .unindent()
-        .addLine("}"),
+        .addLine('}'),
     );
 
     const relativePath = path.posix.join(
       sourcePath,
       pascalCaseToKebabCase(packetTypeName),
     );
-    this.exports.push(relativePath + ".js");
+    this.exports.push(relativePath + '.js');
 
     return new TSFile(
-      relativePath + ".ts",
+      relativePath + '.ts',
       new CodeBlock()
         .addCodeBlock(generateTsDoc(getComment(protocolPacket)))
         .addCodeBlock(objectCodeGenerator.code),
@@ -344,10 +344,10 @@ export class ProtocolCodeGenerator {
 
   private static makePacketSuffix(path: string) {
     switch (path) {
-      case "protocol/net/client":
-        return "ClientPacket";
-      case "protocol/net/server":
-        return "ServerPacket";
+      case 'protocol/net/client':
+        return 'ClientPacket';
+      case 'protocol/net/server':
+        return 'ServerPacket';
       default:
         throw new Error(`Cannot create packet name suffix for path ${path}`);
     }
@@ -357,10 +357,10 @@ export class ProtocolCodeGenerator {
     const codeBlock = new CodeBlock();
     this.exports.forEach((relativePath) => {
       codeBlock.addLine(
-        `export * from "${path.posix.join("@eolib", relativePath)}"`,
+        `export * from "${path.posix.join('@eolib', relativePath)}"`,
       );
     });
-    const generatedIndex = new TSFile("protocol/generated-index.ts", codeBlock);
+    const generatedIndex = new TSFile('protocol/generated-index.ts', codeBlock);
     generatedIndex.write(this.outputRoot);
   }
 }

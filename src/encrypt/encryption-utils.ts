@@ -107,7 +107,7 @@ export function flipMsb(data: Uint8Array): void {
  */
 export function swapMultiples(data: Uint8Array, multiple: number): void {
   if (multiple < 0) {
-    throw new Error("multiple must be a positive number");
+    throw new Error('multiple must be a positive number');
   }
 
   if (multiple === 0) {

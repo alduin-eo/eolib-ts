@@ -1,5 +1,5 @@
-import type { BasicType } from "./basic-type";
-import type { Length } from "./length";
+import type { BasicType } from './basic-type';
+import type { Length } from './length';
 
 export class StringType implements BasicType {
   private readonly _name: string;
@@ -10,8 +10,8 @@ export class StringType implements BasicType {
     this._length = length;
   }
 
-  public get typeKind(): "basic" {
-    return "basic";
+  public get typeKind(): 'basic' {
+    return 'basic';
   }
 
   public get name(): string {

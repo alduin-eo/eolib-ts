@@ -1,6 +1,6 @@
-import type { BasicType } from "./basic-type";
-import type { HasUnderlyingType } from "./has-underlying-type";
-import type { IntegerType } from "./integer-type";
+import type { BasicType } from './basic-type';
+import type { HasUnderlyingType } from './has-underlying-type';
+import type { IntegerType } from './integer-type';
 
 export class BoolType implements BasicType, HasUnderlyingType {
   private readonly _underlyingType: IntegerType;
@@ -9,12 +9,12 @@ export class BoolType implements BasicType, HasUnderlyingType {
     this._underlyingType = underlyingType;
   }
 
-  public get typeKind(): "basic" {
-    return "basic";
+  public get typeKind(): 'basic' {
+    return 'basic';
   }
 
   public get name(): string {
-    return "bool";
+    return 'bool';
   }
 
   public get fixedSize(): number | null {

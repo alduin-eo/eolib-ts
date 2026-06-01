@@ -1,11 +1,11 @@
-import { AccountReplySequenceStart } from "@eolib/packet/account-reply-sequence-start.js";
-import { PacketSequencer } from "@eolib/packet/packet-sequencer.js";
+import { AccountReplySequenceStart } from '@eolib/packet/account-reply-sequence-start.js';
+import { PacketSequencer } from '@eolib/packet/packet-sequencer.js';
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from 'vitest';
 
-describe("PacketSequencer", () => {
-  describe("#nextSequence()", () => {
-    it("should increase the counter 9 times and then wrap around", () => {
+describe('PacketSequencer', () => {
+  describe('#nextSequence()', () => {
+    it('should increase the counter 9 times and then wrap around', () => {
       const sequenceStart = AccountReplySequenceStart.fromValue(123);
       const sequencer = new PacketSequencer(sequenceStart);
 
@@ -17,8 +17,8 @@ describe("PacketSequencer", () => {
     });
   });
 
-  describe("#sequenceStart", () => {
-    it("should update the sequencer start without resetting the counter", () => {
+  describe('#sequenceStart', () => {
+    it('should update the sequencer start without resetting the counter', () => {
       const sequenceStart = AccountReplySequenceStart.fromValue(100);
       const sequencer = new PacketSequencer(sequenceStart);
 

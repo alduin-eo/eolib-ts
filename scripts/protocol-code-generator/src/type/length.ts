@@ -1,4 +1,4 @@
-import { tryParseInt } from "../util/number-utils";
+import { tryParseInt } from '../util/number-utils';
 
 export class Length {
   private readonly _string: string;
@@ -26,6 +26,6 @@ export class Length {
   }
 
   public toString(): string {
-    return this._string ?? "<unspecified>";
+    return this._string ?? '<unspecified>';
   }
 }

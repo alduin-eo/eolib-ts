@@ -1,6 +1,6 @@
-import type { EoWriter } from "@eolib/data/eo-writer.js";
-import type { PacketAction } from "@eolib/protocol/net/packet-action.js";
-import type { PacketFamily } from "@eolib/protocol/net/packet-family.js";
+import type { EoWriter } from '@eolib/data/eo-writer.js';
+import type { PacketAction } from '@eolib/protocol/net/packet-action.js';
+import type { PacketFamily } from '@eolib/protocol/net/packet-family.js';
 
 export interface Packet {
   /**
