@@ -1,18 +1,18 @@
-import { encodeNumber } from "./number-encoding-utils.js";
-import { encodeString } from "./string-encoding-utils.js";
 import {
   CHAR_MAX,
+  INT_MAX,
   SHORT_MAX,
   THREE_MAX,
-  INT_MAX,
 } from "./eo-numeric-limits.js";
+import { encodeNumber } from "./number-encoding-utils.js";
+import { encodeString } from "./string-encoding-utils.js";
 
 import { encode1252 } from "./windows-1252.js";
 
 /** A class for writing EO data to a sequence of bytes. */
 export class EoWriter {
   private data: Uint8Array = new Uint8Array(16);
-  private _length: number = 0;
+  private _length = 0;
   private _stringSanitizationMode = false;
 
   /**
@@ -106,11 +106,7 @@ export class EoWriter {
    *     bytes.
    * @throws `Error` if the string does not have the expected length
    */
-  public addFixedString(
-    str: string,
-    length: number,
-    padded: boolean = false,
-  ): void {
+  public addFixedString(str: string, length: number, padded = false): void {
     EoWriter.checkStringLength(str, length, padded);
     let bytes: Uint8Array = EoWriter.encodeAnsi(str);
     this.sanitizeString(bytes);
@@ -144,7 +140,7 @@ export class EoWriter {
   public addFixedEncodedString(
     str: string,
     length: number,
-    padded: boolean = false,
+    padded = false,
   ): void {
     EoWriter.checkStringLength(str, length, padded);
     let bytes: Uint8Array = EoWriter.encodeAnsi(str);

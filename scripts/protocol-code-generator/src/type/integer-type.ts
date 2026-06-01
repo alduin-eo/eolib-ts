@@ -1,4 +1,4 @@
-import { BasicType } from "./basic-type";
+import type { BasicType } from "./basic-type";
 
 export class IntegerType implements BasicType {
   private readonly _name: string;

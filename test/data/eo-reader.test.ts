@@ -1,7 +1,7 @@
 import { EoReader } from "@eolib/data/eo-reader.js";
 import { encode1252 } from "@eolib/data/windows-1252.js";
 
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
 describe("EoReader", () => {
   describe("#slice()", () => {
@@ -99,8 +99,22 @@ describe("EoReader", () => {
     it("should return decoded 2-byte values", () => {
       // prettier-ignore
       const reader = readerFromBytes(
-        0x01, 0xfe, 0x02, 0xfe, 0x80, 0xfe, 0xfd, 0xfe, 0xfe, 0xfe, 0xfe, 0x80, 0x7f, 0x7f, 0xfd,
-        0xfd
+        0x01,
+        0xfe,
+        0x02,
+        0xfe,
+        0x80,
+        0xfe,
+        0xfd,
+        0xfe,
+        0xfe,
+        0xfe,
+        0xfe,
+        0x80,
+        0x7f,
+        0x7f,
+        0xfd,
+        0xfd,
       );
       expect(reader.getShort()).toBe(0);
       expect(reader.getShort()).toBe(1);
@@ -117,8 +131,33 @@ describe("EoReader", () => {
     it("should return decoded 3-byte values", () => {
       // prettier-ignore
       const reader = readerFromBytes(
-        0x01, 0xfe, 0xfe, 0x02, 0xfe, 0xfe, 0x80, 0xfe, 0xfe, 0xfd, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe,
-        0xfe, 0x80, 0x81, 0x7f, 0x7f, 0xfe, 0xfd, 0xfd, 0xfe, 0xfd, 0xfd, 0xfd
+        0x01,
+        0xfe,
+        0xfe,
+        0x02,
+        0xfe,
+        0xfe,
+        0x80,
+        0xfe,
+        0xfe,
+        0xfd,
+        0xfe,
+        0xfe,
+        0xfe,
+        0xfe,
+        0xfe,
+        0xfe,
+        0x80,
+        0x81,
+        0x7f,
+        0x7f,
+        0xfe,
+        0xfd,
+        0xfd,
+        0xfe,
+        0xfd,
+        0xfd,
+        0xfd,
       );
       expect(reader.getThree()).toBe(0);
       expect(reader.getThree()).toBe(1);
@@ -136,9 +175,50 @@ describe("EoReader", () => {
     it("should return decoded 4-byte values", () => {
       // prettier-ignore
       const reader = readerFromBytes(
-        0x01, 0xfe, 0xfe, 0xfe, 0x02, 0xfe, 0xfe, 0xfe, 0x80, 0xfe, 0xfe, 0xfe, 0xfd, 0xfe, 0xfe,
-        0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0x80, 0x81, 0x82, 0x7f, 0x7f, 0xfe, 0xfe, 0xfd, 0xfd,
-        0xfe, 0xfe, 0xfd, 0xfd, 0xfd, 0xfe, 0x7f, 0x7f, 0x7f, 0x7f, 0xfd, 0xfd, 0xfd, 0xfd
+        0x01,
+        0xfe,
+        0xfe,
+        0xfe,
+        0x02,
+        0xfe,
+        0xfe,
+        0xfe,
+        0x80,
+        0xfe,
+        0xfe,
+        0xfe,
+        0xfd,
+        0xfe,
+        0xfe,
+        0xfe,
+        0xfe,
+        0xfe,
+        0xfe,
+        0xfe,
+        0xfe,
+        0x80,
+        0x81,
+        0x82,
+        0x7f,
+        0x7f,
+        0xfe,
+        0xfe,
+        0xfd,
+        0xfd,
+        0xfe,
+        0xfe,
+        0xfd,
+        0xfd,
+        0xfd,
+        0xfe,
+        0x7f,
+        0x7f,
+        0x7f,
+        0x7f,
+        0xfd,
+        0xfd,
+        0xfd,
+        0xfd,
       );
       expect(reader.getInt()).toBe(0);
       expect(reader.getInt()).toBe(1);
@@ -230,7 +310,16 @@ describe("EoReader", () => {
   describe("#nextChunk()", () => {
     it("should move the reader position to the start of the next chunk", () => {
       // prettier-ignore
-      const reader = readerFromBytes(0x01, 0x02, 0xff, 0x03, 0x04, 0x5, 0xff, 0x06);
+      const reader = readerFromBytes(
+        0x01,
+        0x02,
+        0xff,
+        0x03,
+        0x04,
+        0x5,
+        0xff,
+        0x06,
+      );
       reader.chunkedReadingMode = true;
 
       expect(reader.position).toBe(0);
@@ -250,7 +339,16 @@ describe("EoReader", () => {
 
     it("should work correctly when chunked reading mode is toggled between calls", () => {
       // prettier-ignore
-      const reader = readerFromBytes(0x01, 0x02, 0xff, 0x03, 0x04, 0x5, 0xff, 0x06);
+      const reader = readerFromBytes(
+        0x01,
+        0x02,
+        0xff,
+        0x03,
+        0x04,
+        0x5,
+        0xff,
+        0x06,
+      );
       expect(reader.position).toBe(0);
 
       reader.chunkedReadingMode = true;
@@ -276,7 +374,16 @@ describe("EoReader", () => {
 
     it("should throw an error when the reader is not in chunked reading mode", () => {
       // prettier-ignore
-      const reader = readerFromBytes(0x01, 0x02, 0xff, 0x03, 0x04, 0x5, 0xff, 0x06);
+      const reader = readerFromBytes(
+        0x01,
+        0x02,
+        0xff,
+        0x03,
+        0x04,
+        0x5,
+        0xff,
+        0x06,
+      );
       expect(() => reader.nextChunk()).toThrow();
     });
   });
@@ -285,7 +392,17 @@ describe("EoReader", () => {
     it("should reflect how much data is left", () => {
       // prettier-ignore
       const reader = readerFromBytes(
-        0x01, 0x03, 0x04, 0xfe, 0x05, 0xfe, 0xfe, 0x06, 0xfe, 0xfe, 0xfe
+        0x01,
+        0x03,
+        0x04,
+        0xfe,
+        0x05,
+        0xfe,
+        0xfe,
+        0x06,
+        0xfe,
+        0xfe,
+        0xfe,
       );
 
       expect(reader.remaining).toBe(11);
@@ -307,7 +424,17 @@ describe("EoReader", () => {
     it("should reflect how much data is left in the current chunk", () => {
       // prettier-ignore
       const reader = readerFromBytes(
-        0x01, 0x03, 0x04, 0xff, 0x05, 0xfe, 0xfe, 0x06, 0xfe, 0xfe, 0xfe
+        0x01,
+        0x03,
+        0x04,
+        0xff,
+        0x05,
+        0xfe,
+        0xfe,
+        0x06,
+        0xfe,
+        0xfe,
+        0xfe,
       );
 
       reader.chunkedReadingMode = true;
@@ -329,7 +456,17 @@ describe("EoReader", () => {
   it("should handle under-read", () => {
     // prettier-ignore
     const reader = readerFromBytes(
-      0x7c, 0x67, 0x61, 0x72, 0x62, 0x61, 0x67, 0x65, 0xff, 0xca, 0x31
+      0x7c,
+      0x67,
+      0x61,
+      0x72,
+      0x62,
+      0x61,
+      0x67,
+      0x65,
+      0xff,
+      0xca,
+      0x31,
     );
     reader.chunkedReadingMode = true;
 

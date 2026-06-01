@@ -12,10 +12,10 @@ import { decode1252 } from "./windows-1252.js";
  */
 export class EoReader {
   private readonly data: Uint8Array;
-  private _position: number = 0;
-  private _chunkedReadingMode: boolean = false;
-  private chunkStart: number = 0;
-  private nextBreak: number = -1;
+  private _position = 0;
+  private _chunkedReadingMode = false;
+  private chunkStart = 0;
+  private nextBreak = -1;
 
   /**
    * Creates a new `EoReader` instance for the specified data.
@@ -56,14 +56,13 @@ export class EoReader {
       throw new Error("negative length: " + length);
     }
 
-    let begin = Math.max(0, Math.min(this.data.length, index));
-    let end = begin + Math.min(this.data.length - begin, length);
+    const begin = Math.max(0, Math.min(this.data.length, index));
+    const end = begin + Math.min(this.data.length - begin, length);
 
     if (begin === end) {
       return new EoReader(new Uint8Array([]));
-    } else {
-      return new EoReader(this.data.subarray(begin, end));
     }
+    return new EoReader(this.data.subarray(begin, end));
   }
 
   /**
@@ -138,7 +137,7 @@ export class EoReader {
    * @returns A decoded string
    * @throws `Error` if the length is negative
    */
-  public getFixedString(length: number, padded: boolean = false): string {
+  public getFixedString(length: number, padded = false): string {
     if (length < 0) {
       throw new Error("Negative length");
     }
@@ -168,10 +167,7 @@ export class EoReader {
    * @returns A decoded string
    * @throws `Error` if the length is negative
    */
-  public getFixedEncodedString(
-    length: number,
-    padded: boolean = false,
-  ): string {
+  public getFixedEncodedString(length: number, padded = false): string {
     if (length < 0) {
       throw new Error("Negative length");
     }
@@ -220,9 +216,8 @@ export class EoReader {
   public get remaining(): number {
     if (this.chunkedReadingMode) {
       return this.nextBreak - Math.min(this.position, this.nextBreak);
-    } else {
-      return this.data.length - this.position;
     }
+    return this.data.length - this.position;
   }
 
   /**

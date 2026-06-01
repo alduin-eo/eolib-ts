@@ -1,14 +1,14 @@
+import { encode1252 } from "@eolib/data/windows-1252.js";
 import {
   deinterleave,
   flipMsb,
   interleave,
   swapMultiples,
 } from "@eolib/encrypt/encryption-utils.js";
-import { encode1252 } from "@eolib/data/windows-1252.js";
 
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
-describe("interleave()", function () {
+describe("interleave()", () => {
   const TEST_DATA = [
     {
       input: "Hello, World!",
@@ -41,7 +41,7 @@ describe("interleave()", function () {
   ];
 
   TEST_DATA.forEach((data) => {
-    it(`should interleave "${data.input}" to "${data.interleaved}"`, function () {
+    it(`should interleave "${data.input}" to "${data.interleaved}"`, () => {
       const bytes = encode1252(data.input);
       interleave(bytes);
       expect(bytes).toStrictEqual(encode1252(data.interleaved));
@@ -49,7 +49,7 @@ describe("interleave()", function () {
   });
 });
 
-describe("deinterleave()", function () {
+describe("deinterleave()", () => {
   const TEST_DATA = [
     {
       input: "Hello, World!",
@@ -82,7 +82,7 @@ describe("deinterleave()", function () {
   ];
 
   TEST_DATA.forEach((data) => {
-    it(`should interleave "${data.input}" to "${data.deinterleaved}"`, function () {
+    it(`should interleave "${data.input}" to "${data.deinterleaved}"`, () => {
       const bytes = encode1252(data.input);
       deinterleave(bytes);
       expect(bytes).toStrictEqual(encode1252(data.deinterleaved));
@@ -90,7 +90,7 @@ describe("deinterleave()", function () {
   });
 });
 
-describe("flipMsb()", function () {
+describe("flipMsb()", () => {
   const TEST_DATA = [
     {
       input: "Hello, World!",
@@ -126,7 +126,7 @@ describe("flipMsb()", function () {
   ];
 
   TEST_DATA.forEach((data) => {
-    it(`should flip "${data.input}" to "${data.flipped}"`, function () {
+    it(`should flip "${data.input}" to "${data.flipped}"`, () => {
       const bytes = encode1252(data.input);
       flipMsb(bytes);
       expect(bytes).toStrictEqual(encode1252(data.flipped));
@@ -134,7 +134,7 @@ describe("flipMsb()", function () {
   });
 });
 
-describe("swapMultiples()", function () {
+describe("swapMultiples()", () => {
   const TEST_DATA = [
     {
       input: "Hello, World!",
@@ -167,7 +167,7 @@ describe("swapMultiples()", function () {
   ];
 
   TEST_DATA.forEach((data) => {
-    it(`should swap "${data.input}" to "${data.swapped}" with multiple 3`, function () {
+    it(`should swap "${data.input}" to "${data.swapped}" with multiple 3`, () => {
       const bytes = encode1252(data.input);
       swapMultiples(bytes, 3);
       expect(bytes).toStrictEqual(encode1252(data.swapped));
@@ -175,14 +175,14 @@ describe("swapMultiples()", function () {
   });
 
   TEST_DATA.forEach((data) => {
-    it(`should not swap "${data.input}" with multiple 0`, function () {
+    it(`should not swap "${data.input}" with multiple 0`, () => {
       const bytes = encode1252(data.input);
       swapMultiples(bytes, 0);
       expect(bytes).toStrictEqual(encode1252(data.input));
     });
   });
 
-  it(`should throw when a negative multiple is provided`, function () {
+  it("should throw when a negative multiple is provided", () => {
     expect(() => swapMultiples(new Uint8Array([1, 2, 3, 4, 5]), -1)).toThrow();
   });
 });

@@ -1,4 +1,4 @@
-import { Type } from "./type";
+import type { Type } from "./type";
 
 export interface BasicType extends Type {
   typeKind: "basic";

@@ -1,6 +1,6 @@
 import * as path from "path";
 
-import { CustomType } from "../type/custom-type";
+import type { CustomType } from "../type/custom-type";
 import { pascalCaseToKebabCase } from "../util/name-utils";
 
 export class CodeBlock {
@@ -31,7 +31,7 @@ export class CodeBlock {
     return this;
   }
 
-  public addLine(line: string = ""): this {
+  public addLine(line = ""): this {
     this.add(`${line}\n`);
     return this;
   }
@@ -86,7 +86,7 @@ export class CodeBlock {
     return this;
   }
 
-  public endControlFlow(controlFlow: string = ""): this {
+  public endControlFlow(controlFlow = ""): this {
     this.unindent();
     this.add("}");
     if (controlFlow) {
@@ -111,7 +111,7 @@ export class CodeBlock {
   }
 
   public toString(): string {
-    let result: string = "";
+    let result = "";
     for (const i of this.imports) {
       result += i + "\n";
     }

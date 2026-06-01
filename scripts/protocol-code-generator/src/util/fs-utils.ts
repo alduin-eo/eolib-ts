@@ -4,7 +4,7 @@ export function findFiles(
   directory: string,
   predicate: (file: string) => {},
 ): Array<string> {
-  let files = new Array<string>();
+  let files: string[] = [];
   const items = fs.readdirSync(directory, { withFileTypes: true });
 
   for (const item of items) {

@@ -4,7 +4,7 @@ import {
 } from "@eolib/data/string-encoding-utils.js";
 import { encode1252 } from "@eolib/data/windows-1252.js";
 
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
 const TEST_DATA = [
   {
@@ -43,9 +43,9 @@ describe("encodeString()", () => {
   });
 });
 
-describe("decodeString()", function () {
+describe("decodeString()", () => {
   TEST_DATA.forEach((data) => {
-    it(`should decode "${data.encoded}" to "${data.decoded}"`, function () {
+    it(`should decode "${data.encoded}" to "${data.decoded}"`, () => {
       const bytes = encode1252(data.encoded);
       decodeString(bytes);
       expect(bytes).toEqual(encode1252(data.decoded));

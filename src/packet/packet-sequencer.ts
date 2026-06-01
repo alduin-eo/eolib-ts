@@ -1,4 +1,4 @@
-import { SequenceStart } from "./sequence-start.js";
+import type { SequenceStart } from "./sequence-start.js";
 
 /** A class for generating packet sequences. */
 export class PacketSequencer {

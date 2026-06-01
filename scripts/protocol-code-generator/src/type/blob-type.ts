@@ -1,4 +1,4 @@
-import { Type } from "./type";
+import type { Type } from "./type";
 
 export class BlobType implements Type {
   public get typeKind(): "special" {

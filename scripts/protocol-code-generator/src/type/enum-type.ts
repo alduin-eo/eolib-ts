@@ -1,5 +1,5 @@
-import { CustomType } from "./custom-type";
-import { IntegerType } from "./integer-type";
+import type { CustomType } from "./custom-type";
+import type { IntegerType } from "./integer-type";
 
 export class EnumType implements CustomType {
   private readonly _name: string;

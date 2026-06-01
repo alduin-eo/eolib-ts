@@ -1,4 +1,4 @@
-import { BasicType, isBasicType } from "../type/basic-type";
+import { type BasicType, isBasicType } from "../type/basic-type";
 import { BlobType } from "../type/blob-type";
 import { BoolType } from "../type/bool-type";
 import { isCustomType } from "../type/custom-type";
@@ -7,16 +7,16 @@ import { IntegerType } from "../type/integer-type";
 import { Length } from "../type/length";
 import { StringType } from "../type/string-type";
 import { StructType } from "../type/struct-type";
-import { Type } from "../type/type";
-import { TypeFactory } from "../type/type-factory";
+import type { Type } from "../type/type";
+import type { TypeFactory } from "../type/type-factory";
 import { generateTsDoc } from "../util/doc-utils";
 import { snakeCaseToCamelCase } from "../util/name-utils";
 import { isInteger, tryParseInt } from "../util/number-utils";
 import { CodeBlock } from "./code-block";
 import {
   FieldData,
-  ObjectGenerationContext,
-  ObjectGenerationData,
+  type ObjectGenerationContext,
+  type ObjectGenerationData,
 } from "./object-code-generator";
 
 class FieldCodeGenerator {
@@ -290,7 +290,7 @@ class FieldCodeGenerator {
   }
 
   private generateAccessorTsDoc(): CodeBlock {
-    const notes = new Array<string>();
+    const notes: string[] = [];
 
     if (this.lengthString !== null) {
       let sizeDescription: string;
@@ -463,17 +463,18 @@ class FieldCodeGenerator {
           this.padded,
         ),
       );
-    } else if (type instanceof BlobType) {
+    }
+    if (type instanceof BlobType) {
       return new CodeBlock().addStatement(
         `writer.addBytes(${valueExpression})`,
       );
-    } else if (type instanceof StructType) {
+    }
+    if (type instanceof StructType) {
       return new CodeBlock()
         .addStatement(`${type.name}.serialize(writer, ${valueExpression})`)
         .addImportByType(type);
-    } else {
-      throw new Error("Unhandled Type");
     }
+    throw new Error("Unhandled Type");
   }
 
   private getWriteValueExpression(): string {
@@ -486,7 +487,8 @@ class FieldCodeGenerator {
         throw new Error(
           `"${this.hardcodedValue}" is not a valid integer value.`,
         );
-      } else if (type instanceof BoolType) {
+      }
+      if (type instanceof BoolType) {
         switch (this.hardcodedValue) {
           case "false":
             return "0";
@@ -497,18 +499,17 @@ class FieldCodeGenerator {
               `"${this.hardcodedValue}" is not a valid bool value.`,
             );
         }
-      } else if (type instanceof StringType) {
+      }
+      if (type instanceof StringType) {
         return `"${this.hardcodedValue}"`;
-      } else {
-        throw new Error("Unhandled BasicType");
       }
-    } else {
-      let fieldReference = "data._" + snakeCaseToCamelCase(this.name);
-      if (this.arrayField) {
-        fieldReference += "[i]";
-      }
-      return fieldReference;
+      throw new Error("Unhandled BasicType");
     }
+    let fieldReference = "data._" + snakeCaseToCamelCase(this.name);
+    if (this.arrayField) {
+      fieldReference += "[i]";
+    }
+    return fieldReference;
   }
 
   private static getWriteStatementForBasicType(
@@ -531,15 +532,13 @@ class FieldCodeGenerator {
       case "string":
         if (lengthExpression === null) {
           return `writer.addString(${valueExpression})`;
-        } else {
-          return `writer.addFixedString(${valueExpression}, ${lengthExpression}, ${padded})`;
         }
+        return `writer.addFixedString(${valueExpression}, ${lengthExpression}, ${padded})`;
       case "encoded_string":
         if (lengthExpression === null) {
           return `writer.addEncodedString(${valueExpression})`;
-        } else {
-          return `writer.addFixedEncodedString(${valueExpression}, ${lengthExpression}, ${padded})`;
         }
+        return `writer.addFixedEncodedString(${valueExpression}, ${lengthExpression}, ${padded})`;
       default:
         throw new Error("Unhandled BasicType");
     }
@@ -648,7 +647,7 @@ class FieldCodeGenerator {
         statement.add(readBasicType);
       }
     } else if (type instanceof BlobType) {
-      statement.add(`reader.getBytes(reader.remaining)`);
+      statement.add("reader.getBytes(reader.remaining)");
     } else if (type instanceof StructType) {
       statement.add(`${type.name}.deserialize(reader)`).addImportByType(type);
     } else {
@@ -681,15 +680,13 @@ class FieldCodeGenerator {
       case "string":
         if (lengthExpression === null) {
           return "reader.getString()";
-        } else {
-          return `reader.getFixedString(${lengthExpression}, ${padded})`;
         }
+        return `reader.getFixedString(${lengthExpression}, ${padded})`;
       case "encoded_string":
         if (lengthExpression === null) {
           return "reader.getEncodedString()";
-        } else {
-          return `reader.getFixedEncodedString(${lengthExpression}, ${padded})`;
         }
+        return `reader.getFixedEncodedString(${lengthExpression}, ${padded})`;
       default:
         throw new Error("Unhandled BasicType");
     }
@@ -715,17 +712,20 @@ class FieldCodeGenerator {
     const type = this.getType();
     if (type instanceof IntegerType) {
       return "number";
-    } else if (type instanceof StringType) {
-      return "string";
-    } else if (type instanceof BoolType) {
-      return "boolean";
-    } else if (type instanceof BlobType) {
-      return "Uint8Array";
-    } else if (isCustomType(type)) {
-      return type.name;
-    } else {
-      throw new Error("Unhandled Type");
     }
+    if (type instanceof StringType) {
+      return "string";
+    }
+    if (type instanceof BoolType) {
+      return "boolean";
+    }
+    if (type instanceof BlobType) {
+      return "Uint8Array";
+    }
+    if (isCustomType(type)) {
+      return type.name;
+    }
+    throw new Error("Unhandled Type");
   }
 
   private getLengthExpression(): string {
@@ -758,15 +758,15 @@ export class FieldCodeGeneratorBuilder {
   private _name: string = null;
   private _type: string = null;
   private _length: string = null;
-  private _offset: number = 0;
-  private _padded: boolean = false;
-  private _optional: boolean = false;
+  private _offset = 0;
+  private _padded = false;
+  private _optional = false;
   private _hardcodedValue: string = null;
   private _comment: string = null;
-  private _arrayField: boolean = false;
-  private _lengthField: boolean = false;
-  private _delimited: boolean = false;
-  private _trailingDelimiter: boolean = false;
+  private _arrayField = false;
+  private _lengthField = false;
+  private _delimited = false;
+  private _trailingDelimiter = false;
 
   constructor(
     typeFactory: TypeFactory,
@@ -863,5 +863,5 @@ export class FieldCodeGeneratorBuilder {
 }
 
 function getMaxValueOf(type: IntegerType): number {
-  return type.name === "byte" ? 255 : Math.pow(253, type.fixedSize) - 1;
+  return type.name === "byte" ? 255 : 253 ** type.fixedSize - 1;
 }

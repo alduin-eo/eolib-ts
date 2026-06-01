@@ -1,6 +1,6 @@
-import { BasicType } from "./basic-type";
-import { IntegerType } from "./integer-type";
-import { HasUnderlyingType } from "./has-underlying-type";
+import type { BasicType } from "./basic-type";
+import type { HasUnderlyingType } from "./has-underlying-type";
+import type { IntegerType } from "./integer-type";
 
 export class BoolType implements BasicType, HasUnderlyingType {
   private readonly _underlyingType: IntegerType;

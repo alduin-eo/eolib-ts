@@ -26,7 +26,7 @@ export function encodeNumber(_number: number): Uint8Array {
     value = value % CHAR_MAX;
   }
 
-  let a = value + 1;
+  const a = value + 1;
 
   return new Uint8Array([a, b, c, d]);
 }

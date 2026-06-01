@@ -1,6 +1,6 @@
 import { AccountReplySequenceStart } from "@eolib/packet/account-reply-sequence-start.js";
 
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 describe("AccountReplySequenceStart", () => {
   describe("#fromValue()", () => {

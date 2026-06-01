@@ -3,7 +3,7 @@ import { capitalize, isLowerCase, isUpperCase } from "./string-utils";
 export function pascalCaseToKebabCase(name: string): string {
   let result = "";
   for (let i = 0; i < name.length; ++i) {
-    let c = name.charAt(i);
+    const c = name.charAt(i);
     if (
       i > 0 &&
       isUpperCase(c) &&

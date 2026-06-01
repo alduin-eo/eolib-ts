@@ -1,6 +1,6 @@
 import { SerializationError } from "@eolib/protocol/serialization-error.js";
 
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
 describe("SerializationError", () => {
   describe("#message", () => {

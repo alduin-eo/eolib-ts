@@ -1,6 +1,6 @@
-import { encode1252, decode1252 } from "@eolib/data/windows-1252";
+import { decode1252, encode1252 } from "@eolib/data/windows-1252";
 
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
 describe("encode1252", () => {
   it("encodes ASCII characters (0x00-0x7F)", () => {

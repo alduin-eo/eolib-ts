@@ -1,4 +1,4 @@
-import { XmlElement, XmlNode, XmlText } from "@rgrove/parse-xml";
+import { XmlElement, XmlNode, type XmlText } from "@rgrove/parse-xml";
 import { tryParseInt } from "./number-utils";
 
 export function getInstructions(element: XmlElement): Array<XmlElement> {
@@ -69,7 +69,7 @@ export function getStringAttribute(
 export function getIntAttribute(
   element: XmlElement,
   name: string,
-  defaultValue: number = 0,
+  defaultValue = 0,
 ): number {
   const attributeText: string | undefined = element.attributes[name];
   if (attributeText === undefined) {
@@ -87,7 +87,7 @@ export function getIntAttribute(
 export function getBooleanAttribute(
   element: XmlElement,
   name: string,
-  defaultValue: boolean = false,
+  defaultValue = false,
 ): boolean {
   const attributeText: string | undefined = element.attributes[name];
   if (attributeText === undefined) {

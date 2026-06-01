@@ -1,10 +1,7 @@
 import { XmlElement } from "@rgrove/parse-xml";
 
-import { Type } from "../type/type";
-import { TypeFactory } from "../type/type-factory";
-import { FieldCodeGeneratorBuilder } from "./field-code-generator";
-import { SwitchCodeGenerator } from "./switch-code-generator";
-import { CodeBlock } from "./code-block";
+import type { Type } from "../type/type";
+import type { TypeFactory } from "../type/type-factory";
 import {
   getBooleanAttribute,
   getComment,
@@ -14,6 +11,9 @@ import {
   getStringAttribute,
   getText,
 } from "../util/xml-utils";
+import { CodeBlock } from "./code-block";
+import { FieldCodeGeneratorBuilder } from "./field-code-generator";
+import { SwitchCodeGenerator } from "./switch-code-generator";
 
 export class ObjectCodeGenerator {
   private readonly typeFactory: TypeFactory;
@@ -105,7 +105,7 @@ export class ObjectCodeGenerator {
 
     return new CodeBlock()
       .add(tsDoc)
-      .addLine(`public get byteSize() {`)
+      .addLine("public get byteSize() {")
       .indent()
       .addStatement("return this._byteSize")
       .unindent()

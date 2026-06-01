@@ -3,7 +3,7 @@ import {
   encodeNumber,
 } from "@eolib/data/number-encoding-utils.js";
 
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
 const TEST_DATA = [
   { decoded: 0, encoded: [0x01, 0xfe, 0xfe, 0xfe] },
@@ -32,21 +32,17 @@ const TEST_DATA = [
   { decoded: 4_097_152_080, encoded: [0xfd, 0xfd, 0xfd, 0xfd] },
 ];
 
-describe("encodeNumber()", function () {
+describe("encodeNumber()", () => {
   TEST_DATA.forEach((data) => {
-    it(`should encode ${data.decoded} to [${data.encoded.join(
-      ", ",
-    )}]`, function () {
+    it(`should encode ${data.decoded} to [${data.encoded.join(", ")}]`, () => {
       expect(encodeNumber(data.decoded)).toEqual(new Uint8Array(data.encoded));
     });
   });
 });
 
-describe("decodeNumber()", function () {
+describe("decodeNumber()", () => {
   TEST_DATA.forEach((data) => {
-    it(`should decode [${data.encoded.join(", ")}] to ${
-      data.decoded
-    }`, function () {
+    it(`should decode [${data.encoded.join(", ")}] to ${data.decoded}`, () => {
       expect(decodeNumber(new Uint8Array(data.encoded))).toEqual(data.decoded);
     });
   });

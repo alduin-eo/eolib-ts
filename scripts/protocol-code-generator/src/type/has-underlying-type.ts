@@ -1,5 +1,5 @@
-import { IntegerType } from "./integer-type";
-import { Type } from "./type";
+import type { IntegerType } from "./integer-type";
+import type { Type } from "./type";
 
 export interface HasUnderlyingType extends Type {
   get underlyingType(): IntegerType;

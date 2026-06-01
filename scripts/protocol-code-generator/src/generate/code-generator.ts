@@ -1,12 +1,11 @@
+import { parseXml, type XmlDocument, XmlElement } from "@rgrove/parse-xml";
+import chalk from "chalk";
 import * as fs from "fs";
 import * as path from "path";
-
-import chalk from "chalk";
-import { parseXml, XmlDocument, XmlElement } from "@rgrove/parse-xml";
-
-import { TSFile } from "./ts-file";
+import { EnumType, type EnumValue } from "../type/enum-type";
+import type { StructType } from "../type/struct-type";
 import { TypeFactory } from "../type/type-factory";
-import { EnumType, EnumValue } from "../type/enum-type";
+import { generateTsDoc } from "../util/doc-utils";
 import { findFiles } from "../util/fs-utils";
 import { pascalCaseToKebabCase } from "../util/name-utils";
 import {
@@ -14,10 +13,9 @@ import {
   getInstructions,
   getRequiredStringAttribute,
 } from "../util/xml-utils";
-import { StructType } from "../type/struct-type";
-import { generateTsDoc } from "../util/doc-utils";
-import { ObjectCodeGenerator } from "./object-code-generator";
 import { CodeBlock } from "./code-block";
+import { ObjectCodeGenerator } from "./object-code-generator";
+import { TSFile } from "./ts-file";
 
 export class ProtocolCodeGenerator {
   private readonly inputRoot: string;
@@ -90,7 +88,7 @@ export class ProtocolCodeGenerator {
       const sourcePath =
         "protocol/" + path.dirname(path.posix.relative(this.inputRoot, file));
 
-      for (let protocolEnum of enumElements) {
+      for (const protocolEnum of enumElements) {
         if (!this.typeFactory.defineCustomType(protocolEnum, sourcePath)) {
           throw new Error(
             `${getRequiredStringAttribute(
@@ -101,7 +99,7 @@ export class ProtocolCodeGenerator {
         }
       }
 
-      for (let protocolStruct of structElements) {
+      for (const protocolStruct of structElements) {
         if (!this.typeFactory.defineCustomType(protocolStruct, sourcePath)) {
           throw new Error(
             `${getRequiredStringAttribute(
@@ -113,7 +111,7 @@ export class ProtocolCodeGenerator {
       }
 
       const declaredPackets: Set<string> = new Set();
-      for (let protocolPacket of packetElements) {
+      for (const protocolPacket of packetElements) {
         const packetIdentifier =
           getRequiredStringAttribute(protocolPacket, "family") +
           "_" +

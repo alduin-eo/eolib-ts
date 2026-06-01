@@ -1,7 +1,6 @@
+import chalk from "chalk";
 import * as fs from "fs";
 import * as path from "path";
-
-import chalk from "chalk";
 import { replaceTscAliasPaths } from "tsc-alias";
 
 async function main() {

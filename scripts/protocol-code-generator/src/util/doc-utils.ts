@@ -4,7 +4,7 @@ export function generateTsDoc(
   protocolComment: string,
   notes: string[] = [],
 ): CodeBlock {
-  let lines: string[] = [];
+  const lines: string[] = [];
 
   if (protocolComment) {
     lines.push(

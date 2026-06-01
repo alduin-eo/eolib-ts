@@ -1,5 +1,5 @@
-import { parser, Release, Changelog } from "keep-a-changelog";
 import fs from "fs";
+import { type Changelog, parser, Release } from "keep-a-changelog";
 
 const version: string = require("../package.json").version;
 const changelog: Changelog = parser(fs.readFileSync("CHANGELOG.md", "utf-8"));

@@ -1,4 +1,4 @@
-import { CustomType } from "./custom-type";
+import type { CustomType } from "./custom-type";
 
 export class StructType implements CustomType {
   private readonly _name: string;

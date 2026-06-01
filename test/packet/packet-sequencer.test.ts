@@ -1,7 +1,7 @@
 import { AccountReplySequenceStart } from "@eolib/packet/account-reply-sequence-start.js";
 import { PacketSequencer } from "@eolib/packet/packet-sequencer.js";
 
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
 describe("PacketSequencer", () => {
   describe("#nextSequence()", () => {

@@ -1,5 +1,5 @@
-import { BasicType } from "./basic-type";
-import { Length } from "./length";
+import type { BasicType } from "./basic-type";
+import type { Length } from "./length";
 
 export class StringType implements BasicType {
   private readonly _name: string;

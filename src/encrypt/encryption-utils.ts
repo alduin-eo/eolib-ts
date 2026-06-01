@@ -122,7 +122,7 @@ export function swapMultiples(data: Uint8Array, multiple: number): void {
     } else {
       if (sequenceLength > 1) {
         for (let ii = 0; ii < sequenceLength / 2; ++ii) {
-          let b = data[i - sequenceLength + ii];
+          const b = data[i - sequenceLength + ii];
           data[i - sequenceLength + ii] = data[i - ii - 1];
           data[i - ii - 1] = b;
         }

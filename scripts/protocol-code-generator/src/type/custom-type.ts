@@ -1,4 +1,4 @@
-import { Type } from "./type";
+import type { Type } from "./type";
 
 export interface CustomType extends Type {
   typeKind: "custom";

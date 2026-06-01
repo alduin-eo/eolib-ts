@@ -1,23 +1,23 @@
-import { XmlElement } from "@rgrove/parse-xml";
+import type { XmlElement } from "@rgrove/parse-xml";
 import { EnumType } from "../type/enum-type";
 import { IntegerType } from "../type/integer-type";
-import { TypeFactory } from "../type/type-factory";
-import { CodeBlock } from "./code-block";
-import {
-  FieldData,
-  ObjectCodeGenerator,
-  ObjectGenerationContext,
-  ObjectGenerationData,
-} from "./object-code-generator";
+import type { TypeFactory } from "../type/type-factory";
 import { generateTsDoc } from "../util/doc-utils";
 import { snakeCaseToPascalCase } from "../util/name-utils";
 import { isInteger, tryParseInt } from "../util/number-utils";
 import {
+  getBooleanAttribute,
   getComment,
   getInstructions,
-  getBooleanAttribute,
   getRequiredStringAttribute,
 } from "../util/xml-utils";
+import { CodeBlock } from "./code-block";
+import {
+  type FieldData,
+  ObjectCodeGenerator,
+  type ObjectGenerationContext,
+  type ObjectGenerationData,
+} from "./object-code-generator";
 
 export class SwitchCodeGenerator {
   private readonly fieldName: string;
@@ -118,7 +118,7 @@ export class SwitchCodeGenerator {
 
   public generateCase(protocolCase: XmlElement): ObjectGenerationContext {
     const fieldData = this.getFieldData();
-    let caseDataTypeName = this.getCaseDataTypeName(protocolCase);
+    const caseDataTypeName = this.getCaseDataTypeName(protocolCase);
     if (getBooleanAttribute(protocolCase, "default")) {
       this.data.serialize.addLine("default:").indent();
       this.data.deserialize.addLine("default:").indent();
@@ -206,7 +206,7 @@ export class SwitchCodeGenerator {
         this.getCaseValueExpression(protocolCase) +
         "`";
 
-    let protocolComment = getComment(protocolCase);
+    const protocolComment = getComment(protocolCase);
     if (protocolComment !== null) {
       comment += "\n\n";
       comment += protocolComment;

@@ -6,7 +6,7 @@ import {
 } from "@eolib/data/eo-numeric-limits.js";
 import { EoWriter } from "@eolib/data/eo-writer.js";
 
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
 describe("EoWriter", () => {
   describe("#addByte()", () => {

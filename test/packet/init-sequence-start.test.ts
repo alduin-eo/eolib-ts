@@ -1,6 +1,6 @@
 import { InitSequenceStart } from "@eolib/packet/init-sequence-start.js";
 
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 const VALUE = 879;
 const SEQ1 = 110;

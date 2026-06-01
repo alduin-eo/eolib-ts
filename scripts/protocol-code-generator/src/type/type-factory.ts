@@ -1,13 +1,5 @@
 import { XmlElement } from "@rgrove/parse-xml";
-
-import { Type } from "./type";
-import { EnumType, EnumValue } from "./enum-type";
-import { StructType } from "./struct-type";
-import { hasUnderlyingType } from "./has-underlying-type";
-import { Length } from "./length";
-import { IntegerType } from "./integer-type";
-import { BoolType } from "./bool-type";
-import { StringType } from "./string-type";
+import { tryParseInt } from "../util/number-utils";
 import {
   getBooleanAttribute,
   getInstructions,
@@ -15,8 +7,15 @@ import {
   getStringAttribute,
   getText,
 } from "../util/xml-utils";
-import { tryParseInt } from "../util/number-utils";
 import { BlobType } from "./blob-type";
+import { BoolType } from "./bool-type";
+import { EnumType, EnumValue } from "./enum-type";
+import { hasUnderlyingType } from "./has-underlying-type";
+import { IntegerType } from "./integer-type";
+import { Length } from "./length";
+import { StringType } from "./string-type";
+import { StructType } from "./struct-type";
+import type { Type } from "./type";
 
 export class TypeFactory {
   private readonly unresolvedTypes: Map<string, UnresolvedCustomType>;
@@ -124,7 +123,7 @@ export class TypeFactory {
         if (!(underlyingType instanceof IntegerType)) {
           throw new Error(
             `${underlyingType.name} is not a numeric type, ` +
-              `so it cannot be specified as an underlying type.`,
+              "so it cannot be specified as an underlying type.",
           );
         }
         return underlyingType;
@@ -188,7 +187,7 @@ export class TypeFactory {
       if (!(defaultUnderlyingType instanceof IntegerType)) {
         throw new Error(
           `${defaultUnderlyingType.name} is not a numeric type, ` +
-            `so it cannot be specified as an underlying type.`,
+            "so it cannot be specified as an underlying type.",
         );
       }
 
@@ -199,7 +198,7 @@ export class TypeFactory {
       (child) => child instanceof XmlElement && child.name === "value",
     ) as Array<XmlElement>;
 
-    const values = new Array<EnumValue>();
+    const values: EnumValue[] = [];
     const ordinals = new Set<number>();
     const names = new Set<string>();
 
@@ -425,9 +424,8 @@ export class TypeFactory {
     const lengthString = getStringAttribute(protocolField, "length");
     if (lengthString !== null) {
       return Length.fromString(lengthString);
-    } else {
-      return Length.unspecified();
     }
+    return Length.unspecified();
   }
 
   private static createTypeWithSpecifiedLength(
